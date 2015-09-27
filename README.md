@@ -2,6 +2,8 @@
 Set and get configuration.
 Cantaloup uses redis for storage and will load data from redis when boot up.
 
+You can require the storage lib directly to use it in backend. If so, note that you should start use it when it emits the "ready" event which means data in redis has been loaded.
+
 ## Set
 set value of the key
 
@@ -38,9 +40,9 @@ ALL /api/kv/some/key?method=DELETE
 Link one key to another
 
 ````
-POST/PUT /api/kv/some/anotherKey?link=true&souce=/some/key
+POST/PUT /api/kv/another/key?link=true&souce=/some/key
 or
-ALL /api/kv/some/anotherKey?method=(POST|PUT)&link=true&souce=/some/key
+ALL /api/kv/another/key?method=(POST|PUT)&link=true&souce=/some/key
 ````
 ## Head
 check value existence
