@@ -23,7 +23,6 @@ class Storage extends EventEmitter
       vals: {}
       links: {}
     @client.del [@redisValuesKey, @redisLinksKey], ->
-      console.log "0000000"
       cb()
 
   loadData: ->
