@@ -10,27 +10,27 @@ module.exports = (app) ->
   getKV = (req, res, next) ->
     params = getParams(req)
     storage.get req.path, params, (err, data) ->
-      return res.send 500, err if err
-      return res.send 200, data
+      return res.status(500).send(err) if err
+      return res.status(200).send data
     
 
   createKV = (req, res, next) ->
     params = getParams(req)
     if req.query.link == "true"
-      return res.send 403, "source query required" unless req.query.source
+      return res.status(403).send("source query required") unless req.query.source
       params.link = true
       params.source = req.query.source
     else
       params.data = req.query.data || req.body.data
 
     storage.create req.path, params, (err, data) ->
-      return res.send 500, err if err
-      return res.send 200, data
+      return res.status(500).send(err) if err
+      return res.status(200).send data
 
   updateKV = (req, res, next) ->
     params = getParams(req)
     if req.query.link == "true"
-      return res.send 403, "source query required" unless req.query.source
+      return res.status(403).send("source query required") unless req.query.source
       params.link = true
       params.source = req.query.source
     else
@@ -43,13 +43,13 @@ module.exports = (app) ->
   checkKV = (req, res, next) ->
     storage.head req.path, (exists) ->
       if exists
-        res.status(200).send("ture")
+        res.status(200).send "key set"
       else
-        res.status(404)
+        res.status(404).send "key not set"
 
   removeKV = (req, res, next) ->
     storage.delete req.path, (res) ->
-      res.status(200)
+      res.status(200).send ""
 
 
   handleKV = (req, res, next) ->
@@ -61,10 +61,10 @@ module.exports = (app) ->
       when "head" then checkKV(req, res, next)
       when "delete" then removeKV(req, res, next)
       else
-        res.send 404
+        res.status(404)
 
   app.get "/", (req, res, next) ->
-    res.send 200
+    res.status(200).send ""
 
   app.use "/api/kv", (req, res, next) ->
     req.params.method = req.query.method if req.query.method

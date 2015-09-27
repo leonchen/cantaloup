@@ -16,5 +16,9 @@
     "morgan": "~1.5.1",
     "redis": "^2.0.1",
     "serve-favicon": "~2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3",
+    "should": "^7.1.0"
   }
 }
