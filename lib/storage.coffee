@@ -19,24 +19,18 @@ class Storage
       @loadValues(data)
       @client.hgetall LINKS_KEY, (err, data) =>
         @loadLinks(data)
+        console.log "data loaded"
         @ready = true
 
   loadValues: (data) ->
     return unless data
-    l = data.length
-    i = 0
-    while i < l-2
-      @data.vals[data[i]] = JSON.parse(data[i+1])
-      i+=2
+    for k, j of data
+      @data.vals[k] = JSON.parse(j)
 
   loadLinks: (data) ->
     return unless data
-    l = data.length
-    i = 0
-    while i < l-2
-      @data.links[data[i]] = data[i+1]
-      i+=2
-
+    for k, j of data
+      @data.links[k] = j
     for l, s of @data.links
       @linkValue(l, s)
 
@@ -76,7 +70,6 @@ class Storage
 
 
   setLink: (path, source, cb) ->
-    console.log path, source
     @linkValue(path, source)
     try
       JSON.stringify(@getValue(path))
@@ -99,7 +92,7 @@ class Storage
     return cb("key required") unless k
     d = @getValue(path)
     d.value = data
-    @client.hset(VALUES_KEY, k, @data.vals[k], cb)
+    @client.hset(VALUES_KEY, k, JSON.stringify(@data.vals[k]), cb)
 
 
   getKeys: (path) ->
