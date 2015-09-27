@@ -1,5 +1,6 @@
 # Cantaloup
-set and get configuration
+Set and get configuration.
+Cantaloup uses redis for storage and will load data from redis when boot up.
 
 ## Set
 set value of the key
